@@ -29,7 +29,7 @@ public class Tile : MonoBehaviour {
         }
     };
     public GameObject PipPrefab;
-    public GameObject pipParent;
+    public Transform pipParent;
 
     void Start() {
         initializePips();
@@ -43,5 +43,9 @@ public class Tile : MonoBehaviour {
             Vector2 position = DOT_POSITIONS[value][i];
             pip.transform.localPosition = new Vector3(position.x, 0, position.y);
         }
+    }
+
+    public Transform[] getPips() {
+        return pipParent.GetComponentsInChildren<Transform>();
     }
 }
