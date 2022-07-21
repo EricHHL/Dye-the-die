@@ -27,12 +27,15 @@ public class Grid : MonoBehaviour {
     }
 
     public void LoadLevel(Level level) {
+        foreach (Transform child in transform) {
+            Destroy(child.gameObject);
+        }
+
         TileGrid = new Tile[level.width, level.height];
 
         for (int y = 0; y < level.height; y++) {
             for (int x = 0; x < level.width; x++) {
                 int pos = y * level.width + x;
-                print(pos + " " + y + " " + x);
                 if (level.tiles[pos] != -1)
                     InstantiateTile(x, y, level.tiles[pos]);
             }

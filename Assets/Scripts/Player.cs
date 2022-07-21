@@ -10,6 +10,9 @@ public class Player : MonoBehaviour {
 
     public AnimationCurve tryRollAnimCurve;
 
+    public event System.Action OnPlayerWin;
+    public event System.Action OnPlayerLose;
+
     DiceFace[] faces = new DiceFace[]{
         new DiceFace{direction = Vector3.forward, name = "forward"},
         new DiceFace{direction = Vector3.back, name = "back"},
@@ -22,7 +25,6 @@ public class Player : MonoBehaviour {
     enum DiceState { Incomplete, Valid, Invalid }
 
     void Start() {
-        InitializeFaces();
     }
 
     void Update() {
@@ -38,6 +40,16 @@ public class Player : MonoBehaviour {
         if (Input.GetKey(KeyCode.S)) {
             RollToDirection(Vector3.back);
         }
+    }
+
+    public void Reset() {
+        isMoving = false;
+        foreach (DiceFace face in faces) {
+            if (face.transform != null) {
+                Destroy(face.transform.gameObject);
+            }
+        }
+        InitializeFaces();
     }
 
     void InitializeFaces() {
@@ -94,6 +106,12 @@ public class Player : MonoBehaviour {
 
             downwardFace.value = tile.value;
             tile.value = 0;
+        }
+        DiceState state = GetDiceState();
+        if (state == DiceState.Valid) {
+            OnPlayerWin();
+        } else if (state == DiceState.Invalid) {
+            OnPlayerLose();
         }
     }
 
