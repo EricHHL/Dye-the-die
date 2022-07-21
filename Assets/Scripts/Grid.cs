@@ -8,6 +8,9 @@ public class Grid : MonoBehaviour {
 
     Tile[,] TileGrid;
 
+    public delegate void LevelLoadEvent(Level level);
+    public event LevelLoadEvent OnLevelLoaded;
+
     void Start() {
 
     }
@@ -40,6 +43,8 @@ public class Grid : MonoBehaviour {
                     InstantiateTile(x, y, level.tiles[pos]);
             }
         }
+        if (OnLevelLoaded != null)
+            OnLevelLoaded(level);
     }
 
     public void InstantiateTile(int x, int y, int type) {

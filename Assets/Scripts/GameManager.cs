@@ -8,6 +8,9 @@ public class GameManager : MonoBehaviour {
 
     public Level[] levels;
     public int currentLevel = 0;
+
+    public GameObject WinScreen;
+
     void Start() {
 
         player.OnPlayerWin += OnPlayerWin;
@@ -17,21 +20,22 @@ public class GameManager : MonoBehaviour {
     }
 
     void Update() {
-
-    }
-
-    void OnPlayerWin() {
-        if (currentLevel < levels.Length - 1) {
-            currentLevel++;
-            LoadLevel(currentLevel);
+        if (Input.GetButtonDown("Restart")) {
+            Restart();
         }
     }
 
-    void OnPlayerLose() {
-        LoadLevel(currentLevel);
-
+    void OnPlayerWin() {
+        WinScreen.SetActive(true);
     }
 
+    void OnPlayerLose() {
+        Restart();
+    }
+
+    void Restart(){
+        LoadLevel(currentLevel);
+    }
 
     void LoadLevel(int levelIndex) {
         currentLevel = levelIndex;
@@ -39,5 +43,16 @@ public class GameManager : MonoBehaviour {
         grid.LoadLevel(level);
         player.Reset();
         player.transform.position = new Vector3(level.initialPosition.x, 0, level.initialPosition.y);
+
+        WinScreen.SetActive(false);
+    }
+
+    public void OnNextLevelButtonPressed() {
+        currentLevel++;
+        LoadLevel(currentLevel);
+    }
+
+    public void OnHomeButtonPressed() {
+        // Application.LoadLevel("MainMenu");
     }
 }
