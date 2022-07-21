@@ -12,76 +12,35 @@ public class Player : MonoBehaviour {
 
     DiceFace[] faces = new DiceFace[]{
         new DiceFace{direction = Vector3.forward, name = "forward"},
-        new DiceFace{direction = Vector3.right, name = "right"},
         new DiceFace{direction = Vector3.back, name = "back"},
+        new DiceFace{direction = Vector3.right, name = "right"},
         new DiceFace{direction = Vector3.left, name = "left"},
         new DiceFace{direction = Vector3.up, name = "up"},
         new DiceFace{direction = Vector3.down, name = "down"}
     };
 
+    enum DiceState { Incomplete, Valid, Invalid }
 
     void Start() {
-        initializeFaces();
+        InitializeFaces();
     }
 
     void Update() {
         if (Input.GetKey(KeyCode.D)) {
-            roll(Vector3.right);
+            RollToDirection(Vector3.right);
         }
         if (Input.GetKey(KeyCode.A)) {
-            roll(Vector3.left);
+            RollToDirection(Vector3.left);
         }
         if (Input.GetKey(KeyCode.W)) {
-            roll(Vector3.forward);
+            RollToDirection(Vector3.forward);
         }
         if (Input.GetKey(KeyCode.S)) {
-            roll(Vector3.back);
+            RollToDirection(Vector3.back);
         }
     }
 
-    bool roll(Vector3 direction) {
-        if (isMoving) return false;
-
-        isMoving = true;
-        var anchor = transform.position + (direction + Vector3.down) * 0.5f;
-        var axis = Vector3.Cross(Vector3.up, direction);
-        float rot = 0f;
-
-        if (!canRollTo(direction)) {
-            DOTween.To(() => rot, newRot => {
-                transform.RotateAround(anchor, axis, newRot - rot);
-                rot = newRot;
-            }, 12, 0.3f).SetEase(tryRollAnimCurve).OnComplete(() => {
-                isMoving = false;
-            });
-            return false;
-        }
-
-        DOTween.To(() => rot, newRot => {
-            transform.RotateAround(anchor, axis, newRot - rot);
-            rot = newRot;
-        }, 90, 0.4f).SetEase(Ease.InQuad).OnComplete(() => {
-            isMoving = false;
-            onMovementEnd();
-        });
-        return true;
-    }
-
-    void onMovementEnd() {
-        Tile tile = grid.getTile(transform.position);
-
-        DiceFace downwardFace = getFaceFacingDirection(Vector3.down);
-
-        // transfer tile's pips to player's face
-        Transform[] pips = tile.getPips();
-        foreach (Transform pip in pips) {
-            pip.parent = downwardFace.transform;
-        }
-
-        downwardFace.value = tile.value;
-    }
-
-    void initializeFaces() {
+    void InitializeFaces() {
         foreach (DiceFace face in faces) {
             GameObject go = new GameObject();
             go.transform.parent = transform;
@@ -92,7 +51,53 @@ public class Player : MonoBehaviour {
         }
     }
 
-    DiceFace getFaceFacingDirection(Vector3 direction) {
+    bool RollToDirection(Vector3 direction) {
+        if (isMoving) return false;
+        isMoving = true;
+
+        if (!CanRollTo(direction)) {
+            RollAnim(direction, 12, 0.4f).SetEase(tryRollAnimCurve).OnComplete(() => {
+                isMoving = false;
+            });
+            return false;
+        }
+
+        RollAnim(direction, 90, 0.4f).SetEase(Ease.InQuad).OnComplete(() => {
+            isMoving = false;
+            OnMovementEnd();
+        });
+        return true;
+    }
+
+    Tween RollAnim(Vector3 direction, float degrees, float duration) {
+        var anchor = transform.position + (direction + Vector3.down) * 0.5f;
+        var axis = Vector3.Cross(Vector3.up, direction);
+
+        float rot = 0f;
+        return DOTween.To(() => rot, newRot => {
+            transform.RotateAround(anchor, axis, newRot - rot);
+            rot = newRot;
+        }, degrees, duration);
+    }
+
+    void OnMovementEnd() {
+        Tile tile = grid.getTile(transform.position);
+
+        if (tile.value > 0) {
+            DiceFace downwardFace = GetFaceFacingDirection(Vector3.down);
+
+            // transfer tile's pips to player's face
+            Transform[] pips = tile.getPips();
+            foreach (Transform pip in pips) {
+                pip.parent = downwardFace.transform;
+            }
+
+            downwardFace.value = tile.value;
+            tile.value = 0;
+        }
+    }
+
+    DiceFace GetFaceFacingDirection(Vector3 direction) {
         Vector3 localDirection = transform.InverseTransformDirection(direction);
 
         foreach (DiceFace face in faces) {
@@ -100,16 +105,30 @@ public class Player : MonoBehaviour {
                 return face;
             }
         }
-        return faces[0];
+        return null;
     }
 
-    bool canRollTo(Vector3 direction) {
+    bool CanRollTo(Vector3 direction) {
         Tile nextTile = grid.getTile(transform.position + direction);
         if (nextTile == null) return false;
 
-        DiceFace nextFaceDown = getFaceFacingDirection(direction);
+        if (nextTile.value == 0) return true;
 
+        DiceFace nextFaceDown = GetFaceFacingDirection(direction);
         return nextFaceDown.value == 0;
+    }
+
+    DiceState GetDiceState() {
+        foreach (DiceFace face in faces) {
+            if (face.value == 0) {
+                return DiceState.Incomplete;
+            }
+        }
+        if (faces[0].value + faces[1].value == 7 &&
+            faces[2].value + faces[3].value == 7 &&
+            faces[4].value + faces[5].value == 7)
+            return DiceState.Valid;
+        return DiceState.Invalid;
     }
 
 }
