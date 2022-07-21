@@ -7,24 +7,23 @@ public class Tile : MonoBehaviour {
     public int value;
     Vector2[][] DOT_POSITIONS = new Vector2[][]
     {
-        new Vector2[]{},
-        new Vector2[]
-        {
+        new Vector2[] {},
+        new Vector2[] {
             new Vector2(0, 0),
         },
-        new Vector2[]
-        {
+        new Vector2[] {
             new Vector2(-0.25f, -0.25f), new Vector2(0.25f, 0.25f)
         },
-        new Vector2[]
-        {
+        new Vector2[] {
             new Vector2(-0.25f, -0.25f), new Vector2(0, 0), new Vector2(0.25f, 0.25f)
         },
-        new Vector2[]
-        {
+        new Vector2[] {
+            new Vector2(-0.25f, -0.25f), new Vector2(-0.25f, 0.25f), new Vector2(0.25f, 0.25f), new Vector2(0.25f, -0.25f)
+        },
+        new Vector2[] {
             new Vector2(-0.25f, -0.25f), new Vector2(-0.25f, 0.25f), new Vector2(0.25f, 0.25f), new Vector2(0.25f, -0.25f), new Vector2(0,0)
         },
-        new Vector2[]{
+        new Vector2[] {
             new Vector2(-0.25f, -0.25f), new Vector2(-0.25f, 0.25f), new Vector2(0.25f, 0.25f), new Vector2(0.25f, -0.25f), new Vector2(0, 0.25f), new Vector2(0, -0.25f)
         }
     };

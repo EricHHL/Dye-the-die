@@ -81,7 +81,7 @@ public class Player : MonoBehaviour {
     }
 
     void OnMovementEnd() {
-        Tile tile = grid.getTile(transform.position);
+        Tile tile = grid.GetTile(transform.position);
 
         if (tile.value > 0) {
             DiceFace downwardFace = GetFaceFacingDirection(Vector3.down);
@@ -109,7 +109,7 @@ public class Player : MonoBehaviour {
     }
 
     bool CanRollTo(Vector3 direction) {
-        Tile nextTile = grid.getTile(transform.position + direction);
+        Tile nextTile = grid.GetTile(transform.position + direction);
         if (nextTile == null) return false;
 
         if (nextTile.value == 0) return true;

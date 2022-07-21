@@ -8,4 +8,6 @@ public class Level : ScriptableObject {
     public int width = 6;
     [SerializeField]
     public int height = 6;
+
+    public Vector2 initialPosition;
 }

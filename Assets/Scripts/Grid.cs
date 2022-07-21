@@ -5,24 +5,11 @@ using UnityEngine;
 public class Grid : MonoBehaviour {
 
     public Tile TilePrefab;
-    public int Width = 10;
-    public int Height = 10;
 
-    Tile[][] TileGrid;
+    Tile[,] TileGrid;
 
     void Start() {
-        TileGrid = new Tile[Width][];
 
-        for (int i = 0; i < Width; i++) {
-            TileGrid[i] = new Tile[Height];
-            for (int j = 0; j < Height; j++) {
-                Tile tile = Instantiate(TilePrefab);
-                tile.value = Random.Range(0, 6);
-                tile.transform.parent = transform;
-                tile.transform.localPosition = new Vector3(i, 0, j);
-                TileGrid[i][j] = tile;
-            }
-        }
     }
 
     // Update is called once per frame
@@ -30,12 +17,34 @@ public class Grid : MonoBehaviour {
 
     }
 
-    public Tile getTile(Vector3 position) {
+    public Tile GetTile(Vector3 position) {
         int x = Mathf.RoundToInt(position.x);
         int y = Mathf.RoundToInt(position.z);
-        if (x < 0 || x >= Width || y < 0 || y >= Height) {
+        if (x < 0 || x >= TileGrid.GetLength(0) || y < 0 || y >= TileGrid.GetLength(1)) {
             return null;
         }
-        return TileGrid[x][y];
+        return TileGrid[x, y];
     }
+
+    public void LoadLevel(Level level) {
+        TileGrid = new Tile[level.width, level.height];
+
+        for (int y = 0; y < level.height; y++) {
+            for (int x = 0; x < level.width; x++) {
+                int pos = y * level.width + x;
+                print(pos + " " + y + " " + x);
+                if (level.tiles[pos] != -1)
+                    InstantiateTile(x, y, level.tiles[pos]);
+            }
+        }
+    }
+
+    public void InstantiateTile(int x, int y, int type) {
+        Tile tile = Instantiate(TilePrefab);
+        tile.value = type;
+        tile.transform.parent = transform;
+        tile.transform.localPosition = new Vector3(x, 0, y);
+        TileGrid[x, y] = tile;
+    }
+
 }
