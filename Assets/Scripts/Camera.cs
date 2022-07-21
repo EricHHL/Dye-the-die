@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Camera : MonoBehaviour {
     public Grid grid;
+    public Transform diceTarget;
+
 
     void Start() {
         grid.OnLevelLoaded += OnLevelLoaded;
@@ -11,10 +14,13 @@ public class Camera : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-
+        float rotation = Input.GetAxis("Rotate");
+        if (rotation != 0) {
+            transform.Rotate(0, rotation * Time.deltaTime * 100, 0);
+        }
     }
 
     void OnLevelLoaded(Level level) {
-        transform.position = new Vector3(level.width, 0, level.height) / 2;
+        transform.DOMove(new Vector3(level.width - 1, -1f, level.height - 1) / 2, 0.5f).SetEase(Ease.InOutQuad);
     }
 }

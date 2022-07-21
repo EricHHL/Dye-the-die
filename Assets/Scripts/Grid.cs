@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Grid : MonoBehaviour {
 
@@ -10,6 +11,8 @@ public class Grid : MonoBehaviour {
 
     public delegate void LevelLoadEvent(Level level);
     public event LevelLoadEvent OnLevelLoaded;
+
+    bool isLevelLoading = false;
 
     void Start() {
 
@@ -29,10 +32,12 @@ public class Grid : MonoBehaviour {
         return TileGrid[x, y];
     }
 
-    public void LoadLevel(Level level) {
-        foreach (Transform child in transform) {
-            Destroy(child.gameObject);
+    public void LoadLevel(Level level, Player player) {
+        if (isLevelLoading) {
+            return;
         }
+        DeloadLevel();
+        isLevelLoading = true;
 
         TileGrid = new Tile[level.width, level.height];
 
@@ -43,16 +48,28 @@ public class Grid : MonoBehaviour {
                     InstantiateTile(x, y, level.tiles[pos]);
             }
         }
+        player.Reset(new Vector3(level.initialPosition.x, 10, level.initialPosition.y));
+        isLevelLoading = false;
         if (OnLevelLoaded != null)
             OnLevelLoaded(level);
+    }
+
+    void DeloadLevel() {
+        foreach (Transform child in transform) {
+            child.DOMoveY(child.position.y - 15, 0.3f).SetEase(Ease.InCubic).OnComplete(() => {
+                Destroy(child.gameObject);
+            });
+        }
     }
 
     public void InstantiateTile(int x, int y, int type) {
         Tile tile = Instantiate(TilePrefab);
         tile.value = type;
         tile.transform.parent = transform;
-        tile.transform.localPosition = new Vector3(x, 0, y);
+        tile.transform.localPosition = new Vector3(x, 10, y);
         TileGrid[x, y] = tile;
+
+        tile.transform.DOMoveY(0, 0.4f).SetEase(Ease.OutCubic).SetDelay((float)(x + y) / 20f).SetDelay((float)(x + y) / 20f);
     }
 
 }

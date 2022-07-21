@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour {
     public int currentLevel = 0;
 
     public GameObject WinScreen;
+    public Camera cameraController;
 
     void Start() {
 
@@ -27,6 +28,8 @@ public class GameManager : MonoBehaviour {
 
     void OnPlayerWin() {
         WinScreen.SetActive(true);
+        Vector3 target = cameraController.diceTarget.TransformPoint(Vector3.zero);
+        player.VictoryAnim(target);
     }
 
     void OnPlayerLose() {
@@ -40,9 +43,7 @@ public class GameManager : MonoBehaviour {
     void LoadLevel(int levelIndex) {
         currentLevel = levelIndex;
         Level level = levels[levelIndex];
-        grid.LoadLevel(level);
-        player.Reset();
-        player.transform.position = new Vector3(level.initialPosition.x, 0, level.initialPosition.y);
+        grid.LoadLevel(level, player);
 
         WinScreen.SetActive(false);
     }

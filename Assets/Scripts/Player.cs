@@ -22,6 +22,8 @@ public class Player : MonoBehaviour {
         new DiceFace{direction = Vector3.down, name = "down"}
     };
 
+    List<Tween> currentTweens = new List<Tween>();
+
     enum DiceState { Incomplete, Valid, Invalid }
 
     void Start() {
@@ -42,14 +44,29 @@ public class Player : MonoBehaviour {
         }
     }
 
-    public void Reset() {
-        isMoving = false;
+    public void Reset(Vector3 position) {
+        isMoving = true;
+        transform.localScale = Vector3.one;
         foreach (DiceFace face in faces) {
             if (face.transform != null) {
                 Destroy(face.transform.gameObject);
             }
         }
         InitializeFaces();
+        transform.DOComplete();
+        foreach (Tween t in currentTweens) {
+            t.Rewind();
+            t.Kill();
+        }
+        currentTweens.Clear();
+
+
+        transform.position = position + Vector3.up * 10;
+
+        transform.DOMoveY(0, 0.6f).SetEase(Ease.OutBounce).SetDelay(0.3f).OnComplete(() => {
+            isMoving = false;
+            OnMovementEnd();
+        });
     }
 
     void InitializeFaces() {
@@ -86,10 +103,18 @@ public class Player : MonoBehaviour {
         var axis = Vector3.Cross(Vector3.up, direction);
 
         float rot = 0f;
-        return DOTween.To(() => rot, newRot => {
+        Tween tween = DOTween.To(() => rot, newRot => {
             transform.RotateAround(anchor, axis, newRot - rot);
             rot = newRot;
         }, degrees, duration);
+        currentTweens.Add(tween);
+        return tween;
+    }
+
+    public void VictoryAnim(Vector3 target) {
+        currentTweens.Add(transform.DOMove(target, 0.5f).SetEase(Ease.InOutQuad));
+        currentTweens.Add(transform.DOScale(2, 0.5f).SetEase(Ease.InOutQuad));
+        currentTweens.Add(transform.DORotate(new Vector3(360, 1080, 360), 9f, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart));
     }
 
     void OnMovementEnd() {
