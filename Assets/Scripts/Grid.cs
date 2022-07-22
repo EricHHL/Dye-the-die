@@ -6,6 +6,7 @@ using DG.Tweening;
 public class Grid : MonoBehaviour {
 
     public GameObject PipTilePrefab;
+    public GameObject TrashTilePrefab;
 
     Tile[,] TileGrid;
 
@@ -65,12 +66,24 @@ public class Grid : MonoBehaviour {
     public void InstantiateTile(int x, int y, int type) {
         GameObject tileGO;
         Tile tile;
-        if (type <= 6) {
-            tileGO = Instantiate(PipTilePrefab);
-            tile = tileGO.GetComponent<PipTile>();
-            ((PipTile)tile).value = type;
-        } else {
-            return;
+        switch (type) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+                tileGO = Instantiate(PipTilePrefab);
+                tile = tileGO.GetComponent<PipTile>();
+                ((PipTile)tile).value = type;
+                break;
+            case 7:
+                tileGO = Instantiate(TrashTilePrefab);
+                tile = tileGO.GetComponent<TrashTile>();
+                break;
+            default:
+                return;
         }
 
         TileGrid[x, y] = tile;
