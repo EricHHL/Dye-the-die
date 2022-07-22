@@ -135,13 +135,17 @@ public class Player : MonoBehaviour {
 
     public DiceFace GetFaceFacingDirection(Vector3 direction) {
         Vector3 localDirection = transform.InverseTransformDirection(direction);
+        float closest = float.MaxValue;
+        DiceFace closestFace = null;
 
         foreach (DiceFace face in faces) {
-            if (face.direction == localDirection) {
-                return face;
+            float distance = Vector3.Distance(localDirection, face.direction);
+            if (distance < closest) {
+                closest = distance;
+                closestFace = face;
             }
         }
-        return null;
+        return closestFace;
     }
 
     bool CanRollTo(Vector3 direction) {
@@ -149,6 +153,7 @@ public class Player : MonoBehaviour {
         if (nextTile == null) return false;
 
         DiceFace nextFaceDown = GetFaceFacingDirection(direction);
+        if (nextFaceDown == null) return false;
         return nextTile.CanPlayerEnter(this, nextFaceDown);
     }
 

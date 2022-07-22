@@ -60,6 +60,14 @@ public class GameManager : MonoBehaviour {
         if (moves.Count > 1 && player.isMoving == false) {
             PlayerMove currentMove = moves.Pop();
 
+            // roll player back to the previous position
+            PlayerMove lastMove = moves.Peek();
+            bool success = player.RollToDirection(lastMove.position - player.transform.position, true);
+            // for some reason the move can't be udone, so rollback
+            if(!success) {
+                moves.Push(currentMove);
+                return;
+            }
             // if the move triggered an action in the tile, undo it
             if (currentMove.triggeredAction) {
                 Tile tile = grid.GetTile(currentMove.position);
@@ -67,14 +75,12 @@ public class GameManager : MonoBehaviour {
                 tile.OnPlayerEnterReverse(player, downwardFace);
             }
 
-            // roll player back to the previous position
-            PlayerMove lastMove = moves.Peek();
-            player.RollToDirection(lastMove.position - player.transform.position, true);
         }
     }
 
     void Restart() {
         LoadLevel(currentLevel);
+        moves.Clear();
     }
 
     void LoadLevel(int levelIndex) {
