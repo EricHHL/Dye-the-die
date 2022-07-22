@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
     public Level[] levels;
     public int currentLevel = 0;
 
-    public GameObject WinScreen;
+    public WinScreen winScreen;
     public GameCamera cameraController;
 
     Stack<PlayerMove> moves = new Stack<PlayerMove>();
@@ -38,9 +38,21 @@ public class GameManager : MonoBehaviour {
     }
 
     void OnPlayerWin() {
-        WinScreen.SetActive(true);
+        winScreen.SetActive(true);
         Vector3 target = cameraController.diceTarget.TransformPoint(Vector3.zero);
         player.VictoryAnim(target);
+
+        int moveCount = moves.Count - 1;
+        int stars;
+        if (moveCount <= levels[currentLevel].limit3Stars) {
+            stars = 3;
+        } else if (moveCount <= levels[currentLevel].limit2Stars) {
+            stars = 2;
+        } else {
+            stars = 1;
+        }
+        winScreen.SetStars(stars);
+        Progression.setLevelComplete(currentLevel, stars);
     }
 
     void OnPlayerLose() {
@@ -48,7 +60,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void OnPlayerMove(Vector3 newPosition, bool isUndo) {
-        if(isUndo) return;
+        if (isUndo) return;
         Tile tile = grid.GetTile(player.transform.position);
         DiceFace downwardFace = player.GetFaceFacingDirection(Vector3.down);
 
@@ -64,7 +76,7 @@ public class GameManager : MonoBehaviour {
             PlayerMove lastMove = moves.Peek();
             bool success = player.RollToDirection(lastMove.position - player.transform.position, true);
             // for some reason the move can't be udone, so rollback
-            if(!success) {
+            if (!success) {
                 moves.Push(currentMove);
                 return;
             }
@@ -84,11 +96,12 @@ public class GameManager : MonoBehaviour {
     }
 
     void LoadLevel(int levelIndex) {
+        moves.Clear();
         currentLevel = levelIndex;
         Level level = levels[levelIndex];
         grid.LoadLevel(level, player);
 
-        WinScreen.SetActive(false);
+        winScreen.SetActive(false);
     }
 
     public void OnNextLevelButtonPressed() {

@@ -10,4 +10,6 @@ public class Level : ScriptableObject {
     public int height = 6;
 
     public Vector2 initialPosition;
+    public int limit3Stars;
+    public int limit2Stars;
 }

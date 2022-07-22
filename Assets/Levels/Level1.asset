@@ -16,3 +16,5 @@ MonoBehaviour:
   width: 2
   height: 5
   initialPosition: {x: 0, y: 0}
+  limit3Stars: 6
+  limit2Stars: 8
