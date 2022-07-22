@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 64bed2eefe69e984785b2a36caf067c5
+guid: 2f7fd661dc2e11247bef0aa1469fac00
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,9 +9,8 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Edu SA Beginner
-  fallbackFontReferences:
-  - {fileID: 12800000, guid: 82a21b31244b5894394583e47a2b1245, type: 3}
+  - Dish Out
+  fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1

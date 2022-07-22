@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour {
     public int currentLevel = 0;
 
     public GameObject WinScreen;
-    public Camera cameraController;
+    public GameCamera cameraController;
 
     Stack<PlayerMove> moves = new Stack<PlayerMove>();
 

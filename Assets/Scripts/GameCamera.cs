@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class Camera : MonoBehaviour {
+public class GameCamera : MonoBehaviour {
     public Grid grid;
     public Transform diceTarget;
 
 
-    void Start() {
+    void Awake() {
         grid.OnLevelLoaded += OnLevelLoaded;
     }
 
