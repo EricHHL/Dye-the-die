@@ -5,10 +5,13 @@ using DG.Tweening;
 
 public class Player : MonoBehaviour {
 
-    private bool isMoving = false;
+    public bool isMoving = false;
     public Grid grid;
 
     public AnimationCurve tryRollAnimCurve;
+
+    public delegate void PlayerMoveEvent(Vector3 newPosition, bool isUndo);
+    public event PlayerMoveEvent OnPlayerMove;
 
     public event System.Action OnPlayerWin;
     public event System.Action OnPlayerLose;
@@ -80,7 +83,7 @@ public class Player : MonoBehaviour {
         }
     }
 
-    bool RollToDirection(Vector3 direction) {
+    public bool RollToDirection(Vector3 direction, bool isUndo = false) {
         if (isMoving) return false;
         isMoving = true;
 
@@ -91,9 +94,9 @@ public class Player : MonoBehaviour {
             return false;
         }
 
-        RollAnim(direction, 90, 0.4f).SetEase(Ease.InQuad).OnComplete(() => {
+        RollAnim(direction, 90, isUndo ? 0.1f : 0.4f).SetEase(Ease.InQuad).OnComplete(() => {
             isMoving = false;
-            OnMovementEnd();
+            OnMovementEnd(isUndo);
         });
         return true;
     }
@@ -117,21 +120,11 @@ public class Player : MonoBehaviour {
         currentTweens.Add(transform.DORotate(new Vector3(360, 1080, 360), 9f, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart));
     }
 
-    void OnMovementEnd() {
-        Tile tile = grid.GetTile(transform.position);
-
-        if (tile.value > 0) {
-            DiceFace downwardFace = GetFaceFacingDirection(Vector3.down);
-
-            // transfer tile's pips to player's face
-            Transform[] pips = tile.getPips();
-            foreach (Transform pip in pips) {
-                pip.parent = downwardFace.transform;
-            }
-
-            downwardFace.value = tile.value;
-            tile.value = 0;
+    void OnMovementEnd(bool isUndo = false) {
+        if (OnPlayerMove != null) {
+            OnPlayerMove(transform.position, isUndo);
         }
+
         DiceState state = GetDiceState();
         if (state == DiceState.Valid) {
             OnPlayerWin();
@@ -140,7 +133,7 @@ public class Player : MonoBehaviour {
         }
     }
 
-    DiceFace GetFaceFacingDirection(Vector3 direction) {
+    public DiceFace GetFaceFacingDirection(Vector3 direction) {
         Vector3 localDirection = transform.InverseTransformDirection(direction);
 
         foreach (DiceFace face in faces) {
@@ -155,10 +148,8 @@ public class Player : MonoBehaviour {
         Tile nextTile = grid.GetTile(transform.position + direction);
         if (nextTile == null) return false;
 
-        if (nextTile.value == 0) return true;
-
         DiceFace nextFaceDown = GetFaceFacingDirection(direction);
-        return nextFaceDown.value == 0;
+        return nextTile.CanPlayerEnter(this, nextFaceDown);
     }
 
     DiceState GetDiceState() {

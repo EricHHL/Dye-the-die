@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 3781943967700370067}
   - component: {fileID: 8633378235606102756}
   m_Layer: 0
-  m_Name: Tile
+  m_Name: PipTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4567ef11efa4916458c0d52153f46539, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  value: 2
+  value: 0
   PipPrefab: {fileID: 7933411417604820332, guid: 3904189f4638e1f4ab7d00bf81cd2fe4,
     type: 3}
-  face: {fileID: 0}
+  face: {fileID: 8369700331823726359}

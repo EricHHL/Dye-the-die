@@ -12,10 +12,18 @@ public class GameManager : MonoBehaviour {
     public GameObject WinScreen;
     public Camera cameraController;
 
+    Stack<PlayerMove> moves = new Stack<PlayerMove>();
+
+    struct PlayerMove {
+        public Vector3 position;
+        public bool triggeredAction;
+    }
+
     void Start() {
 
         player.OnPlayerWin += OnPlayerWin;
         player.OnPlayerLose += OnPlayerLose;
+        player.OnPlayerMove += OnPlayerMove;
 
         LoadLevel(0);
     }
@@ -23,6 +31,9 @@ public class GameManager : MonoBehaviour {
     void Update() {
         if (Input.GetButtonDown("Restart")) {
             Restart();
+        }
+        if (Input.GetButton("Undo")) {
+            Undo();
         }
     }
 
@@ -36,7 +47,33 @@ public class GameManager : MonoBehaviour {
         Restart();
     }
 
-    void Restart(){
+    void OnPlayerMove(Vector3 newPosition, bool isUndo) {
+        if(isUndo) return;
+        Tile tile = grid.GetTile(player.transform.position);
+        DiceFace downwardFace = player.GetFaceFacingDirection(Vector3.down);
+
+        bool triggeredAction = tile.OnPlayerEnter(player, downwardFace);
+        moves.Push(new PlayerMove { position = newPosition, triggeredAction = triggeredAction });
+    }
+
+    void Undo() {
+        if (moves.Count > 1 && player.isMoving == false) {
+            PlayerMove currentMove = moves.Pop();
+
+            // if the move triggered an action in the tile, undo it
+            if (currentMove.triggeredAction) {
+                Tile tile = grid.GetTile(currentMove.position);
+                DiceFace downwardFace = player.GetFaceFacingDirection(Vector3.down);
+                tile.OnPlayerEnterReverse(player, downwardFace);
+            }
+
+            // roll player back to the previous position
+            PlayerMove lastMove = moves.Peek();
+            player.RollToDirection(lastMove.position - player.transform.position, true);
+        }
+    }
+
+    void Restart() {
         LoadLevel(currentLevel);
     }
 

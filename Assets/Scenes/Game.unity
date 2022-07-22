@@ -737,7 +737,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2299d68751c23a34293070bb7aa89b8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TilePrefab: {fileID: 8633378235606102756, guid: 038521fd894d83d44b512a92f4c93b48,
+  PipTilePrefab: {fileID: 7463378079241352312, guid: 6fd4efcc4c6f7814c8d0b19215b7d542,
     type: 3}
 --- !u!4 &1254934685
 Transform:

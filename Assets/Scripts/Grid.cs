@@ -5,7 +5,7 @@ using DG.Tweening;
 
 public class Grid : MonoBehaviour {
 
-    public Tile TilePrefab;
+    public GameObject PipTilePrefab;
 
     Tile[,] TileGrid;
 
@@ -63,13 +63,20 @@ public class Grid : MonoBehaviour {
     }
 
     public void InstantiateTile(int x, int y, int type) {
-        Tile tile = Instantiate(TilePrefab);
-        tile.value = type;
-        tile.transform.parent = transform;
-        tile.transform.localPosition = new Vector3(x, 10, y);
-        TileGrid[x, y] = tile;
+        GameObject tileGO;
+        Tile tile;
+        if (type <= 6) {
+            tileGO = Instantiate(PipTilePrefab);
+            tile = tileGO.GetComponent<PipTile>();
+            ((PipTile)tile).value = type;
+        } else {
+            return;
+        }
 
-        tile.transform.DOMoveY(0, 0.4f).SetEase(Ease.OutCubic).SetDelay((float)(x + y) / 20f).SetDelay((float)(x + y) / 20f);
+        TileGrid[x, y] = tile;
+        tileGO.transform.parent = transform;
+        tileGO.transform.localPosition = new Vector3(x, 10, y);
+        tileGO.transform.DOMoveY(0, 0.4f).SetEase(Ease.OutCubic).SetDelay((float)(x + y) / 20f).SetDelay((float)(x + y) / 20f);
     }
 
 }
