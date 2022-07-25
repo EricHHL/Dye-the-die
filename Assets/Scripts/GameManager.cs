@@ -25,7 +25,9 @@ public class GameManager : MonoBehaviour {
         player.OnPlayerLose += OnPlayerLose;
         player.OnPlayerMove += OnPlayerMove;
 
-        LoadLevel(0);
+        currentLevel = Progression.GetCurrentLevel();
+
+        LoadLevel(currentLevel);
     }
 
     void Update() {
@@ -52,7 +54,7 @@ public class GameManager : MonoBehaviour {
             stars = 1;
         }
         gameUI.SetStars(stars);
-        Progression.setLevelComplete(currentLevel, stars);
+        Progression.SetLevelComplete(levels[currentLevel], stars);
     }
 
     void OnPlayerLose() {

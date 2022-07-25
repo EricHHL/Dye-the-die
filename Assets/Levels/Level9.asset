@@ -18,3 +18,4 @@ MonoBehaviour:
   initialPosition: {x: 0, y: 2}
   limit3Stars: 15
   limit2Stars: 18
+  levelNumber: 9
