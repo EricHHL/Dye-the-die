@@ -15,8 +15,9 @@ public class Player : MonoBehaviour {
 
     public event System.Action OnPlayerWin;
     public event System.Action OnPlayerLose;
+    public event System.Action OnPlayerChanged;
 
-    DiceFace[] faces = new DiceFace[]{
+    public DiceFace[] faces = new DiceFace[]{
         new DiceFace{direction = Vector3.forward, name = "forward"},
         new DiceFace{direction = Vector3.back, name = "back"},
         new DiceFace{direction = Vector3.right, name = "right"},
@@ -123,6 +124,9 @@ public class Player : MonoBehaviour {
     void OnMovementEnd(bool isUndo = false) {
         if (OnPlayerMove != null) {
             OnPlayerMove(transform.position, isUndo);
+        }
+        if (OnPlayerChanged != null) {
+            OnPlayerChanged();
         }
 
         DiceState state = GetDiceState();

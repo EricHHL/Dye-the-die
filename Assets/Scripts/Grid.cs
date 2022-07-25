@@ -12,6 +12,7 @@ public class Grid : MonoBehaviour {
 
     public delegate void LevelLoadEvent(Level level);
     public event LevelLoadEvent OnLevelLoaded;
+    public event System.Action OnLevelDeloaded;
 
     bool isLevelLoading = false;
 
@@ -61,6 +62,8 @@ public class Grid : MonoBehaviour {
                 Destroy(child.gameObject);
             });
         }
+        if (OnLevelDeloaded != null)
+            OnLevelDeloaded();
     }
 
     public void InstantiateTile(int x, int y, int type) {
