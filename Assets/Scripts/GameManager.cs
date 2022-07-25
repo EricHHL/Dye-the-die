@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
     public Level[] levels;
     public int currentLevel = 0;
 
-    public WinScreen winScreen;
+    public GameUI gameUI;
     public GameCamera cameraController;
 
     Stack<PlayerMove> moves = new Stack<PlayerMove>();
@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void OnPlayerWin() {
-        winScreen.SetActive(true);
+        gameUI.SetState(GameUI.UIState.Win);
         Vector3 target = cameraController.diceTarget.TransformPoint(Vector3.zero);
         player.VictoryAnim(target);
 
@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour {
         } else {
             stars = 1;
         }
-        winScreen.SetStars(stars);
+        gameUI.SetStars(stars);
         Progression.setLevelComplete(currentLevel, stars);
     }
 
@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour {
         moves.Push(new PlayerMove { position = newPosition, triggeredAction = triggeredAction });
     }
 
-    void Undo() {
+    public void Undo() {
         if (moves.Count > 1 && player.isMoving == false) {
             PlayerMove currentMove = moves.Pop();
 
@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    void Restart() {
+    public void Restart() {
         LoadLevel(currentLevel);
         moves.Clear();
     }
@@ -101,7 +101,8 @@ public class GameManager : MonoBehaviour {
         Level level = levels[levelIndex];
         grid.LoadLevel(level, player);
 
-        winScreen.SetActive(false);
+        gameUI.SetState(GameUI.UIState.Playing);
+        gameUI.SetLevel(levelIndex + 1);
     }
 
     public void OnNextLevelButtonPressed() {
