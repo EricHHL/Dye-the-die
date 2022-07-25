@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2f7fd661dc2e11247bef0aa1469fac00
+guid: 5ec81546c4007f14fbcd23eb79ce81b2
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Dish Out
+  - modero
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

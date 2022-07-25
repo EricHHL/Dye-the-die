@@ -1,29 +1,17 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameUI : MonoBehaviour {
     public GameObject GameUIPanel;
     public GameObject WinScreen;
     public TMPro.TextMeshProUGUI LevelText;
-    public Image star1;
-    public Image star2;
-    public Image star3;
-    public Color inactiveColor;
-    public Color activeColor;
 
     public GameManager gameManager;
+    public StarsDisplay starsDisplay;
 
     public enum UIState {
         Playing,
         Win,
-    }
-
-
-    public void SetStars(int stars) {
-        star1.color = stars >= 1 ? activeColor : inactiveColor;
-        star2.color = stars >= 2 ? activeColor : inactiveColor;
-        star3.color = stars >= 3 ? activeColor : inactiveColor;
     }
 
     public void SetState(UIState state) {
@@ -31,8 +19,12 @@ public class GameUI : MonoBehaviour {
         WinScreen.SetActive(state == UIState.Win);
     }
 
+    public void SetStars(int stars) {
+        starsDisplay.SetStars(stars);
+    }
+
     public void SetLevel(int level) {
-        LevelText.text = "Level " + level;
+        LevelText.text = "LEVEL " + level;
     }
 
     public void OnButtonMenuPressed() {
