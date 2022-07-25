@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour {
         gameUI.SetLevel(levelIndex + 1);
     }
 
-    public void OnNextLevelButtonPressed() {
+    public void NextLevel() {
         currentLevel++;
         LoadLevel(currentLevel);
     }

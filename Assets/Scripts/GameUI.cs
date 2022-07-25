@@ -46,5 +46,9 @@ public class GameUI : MonoBehaviour {
     public void OnButtonUndoPressed() {
         gameManager.Undo();
     }
+
+    public void OnNextLevelButtonPressed() {
+        gameManager.NextLevel();
+    }
 }
 
