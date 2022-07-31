@@ -139,7 +139,7 @@ public class Player : MonoBehaviour {
 
     public DiceFace GetFaceFacingDirection(Vector3 direction) {
         Vector3 localDirection = transform.InverseTransformDirection(direction);
-        float closest = float.MaxValue;
+        float closest = 0.01f;
         DiceFace closestFace = null;
 
         foreach (DiceFace face in faces) {

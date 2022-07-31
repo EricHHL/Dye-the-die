@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void Start() {
+        Application.targetFrameRate = 60;
 
         player.OnPlayerWin += OnPlayerWin;
         player.OnPlayerLose += OnPlayerLose;
@@ -36,6 +37,16 @@ public class GameManager : MonoBehaviour {
         }
         if (Input.GetButton("Undo")) {
             Undo();
+        }
+
+        if (Input.GetMouseButtonDown(0)) {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit)) {
+                if (hit.collider.tag == "Tile") {
+                    player.RollToDirection(hit.transform.position - player.transform.position);
+                }
+            }
         }
     }
 

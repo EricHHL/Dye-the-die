@@ -1,13 +1,68 @@
 {
-    "m_SelectedDeviceId": "",
+    "m_SelectedDeviceId": "192.168.100.14:33005",
     "m_SelectedPackage": {
-        "deviceId": "",
-        "name": "",
-        "processId": 0,
+        "deviceId": "192.168.100.14:33005",
+        "name": "com.suaveware.dyethedie2",
+        "processId": 5048,
         "exited": false
     },
     "m_SelectedPriority": 0,
-    "m_KnownPackagesForSerialization": [],
+    "m_KnownPackagesForSerialization": [
+        {
+            "deviceId": "192.168.100.14:33005",
+            "name": "com.suaveware.dyethedie2",
+            "processId": 9587,
+            "exited": true
+        },
+        {
+            "deviceId": "192.168.100.14:33005",
+            "name": "com.suaveware.dyethedie2",
+            "processId": 21779,
+            "exited": true
+        },
+        {
+            "deviceId": "192.168.100.14:33005",
+            "name": "com.suaveware.dyethedie2",
+            "processId": 23660,
+            "exited": true
+        },
+        {
+            "deviceId": "192.168.100.14:33005",
+            "name": "com.suaveware.dyethedie2",
+            "processId": 24993,
+            "exited": true
+        },
+        {
+            "deviceId": "192.168.100.14:33005",
+            "name": "com.suaveware.dyethedie2",
+            "processId": 26240,
+            "exited": false
+        },
+        {
+            "deviceId": "192.168.100.14:33005",
+            "name": "com.suaveware.dyethedie2",
+            "processId": 28587,
+            "exited": false
+        },
+        {
+            "deviceId": "192.168.100.14:33005",
+            "name": "com.suaveware.dyethedie2",
+            "processId": 31894,
+            "exited": false
+        },
+        {
+            "deviceId": "192.168.100.14:33005",
+            "name": "com.suaveware.dyethedie2",
+            "processId": 3009,
+            "exited": false
+        },
+        {
+            "deviceId": "192.168.100.14:33005",
+            "name": "com.suaveware.dyethedie2",
+            "processId": 5048,
+            "exited": false
+        }
+    ],
     "m_Tags": {
         "m_Entries": [
             {
@@ -41,9 +96,20 @@
         ]
     },
     "m_MemoryViewerState": {
-        "MemoryWindowHeight": 0.0,
-        "MemoryWindowWidth": 0.0,
-        "MemoryTypeEnabled": [],
+        "MemoryWindowHeight": 300.0,
+        "MemoryWindowWidth": 170.0,
+        "MemoryTypeEnabled": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+        ],
         "MemoryGroup": 2,
         "Behavior": 0
     },

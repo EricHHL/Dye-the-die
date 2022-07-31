@@ -7,7 +7,8 @@ public class GameCamera : MonoBehaviour {
     public Grid grid;
     public Transform diceTarget;
 
-
+    Vector2 previousMousePosition;
+    bool isRotating;
     void Awake() {
         grid.OnLevelLoaded += OnLevelLoaded;
     }
@@ -17,6 +18,22 @@ public class GameCamera : MonoBehaviour {
         float rotation = Input.GetAxis("Rotate");
         if (rotation != 0) {
             transform.Rotate(0, rotation * Time.deltaTime * 100, 0);
+        }
+
+        //rotate camera by dragging
+        if (Input.GetMouseButtonDown(0)) {
+            isRotating = true;
+            previousMousePosition = Input.mousePosition;
+        }
+        if (Input.GetMouseButtonUp(0)) {
+            isRotating = false;
+        }
+
+        if (isRotating) {
+            Vector2 currentMousePosition = Input.mousePosition;
+            Vector2 delta = currentMousePosition - previousMousePosition;
+            transform.Rotate(0, delta.x * Time.deltaTime * 5, 0);
+            previousMousePosition = currentMousePosition;
         }
     }
 

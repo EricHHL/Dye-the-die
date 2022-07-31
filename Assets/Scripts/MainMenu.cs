@@ -5,8 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
 
+    void Start() {
+    }
+
     public void OnPlayButtonPressed() {
-        SceneManager.LoadScene("Game");
-        
+        SceneManager.LoadScene("LevelSelector");   
     }
 }
