@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public interface Tile {
+public interface ITile {
 
     bool OnPlayerEnter(Player player, DiceFace downwardFace);
     void OnPlayerEnterReverse(Player player, DiceFace downwardFace);

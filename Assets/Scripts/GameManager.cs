@@ -1,16 +1,21 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
-    public Grid grid;
-    public Player player;
+    [SerializeField]
+    Grid grid;
+    [SerializeField]
+    Player player;
 
-    public Level[] levels;
-    public int currentLevel = 0;
+    [SerializeField]
+    Level[] levels;
+    [SerializeField]
+    int currentLevel = 0;
 
-    public GameUI gameUI;
-    public GameCamera cameraController;
+    [SerializeField]
+    GameUI gameUI;
+    [SerializeField]
+    GameCamera cameraController;
 
     Stack<PlayerMove> moves = new Stack<PlayerMove>();
 
@@ -74,7 +79,7 @@ public class GameManager : MonoBehaviour {
 
     void OnPlayerMove(Vector3 newPosition, bool isUndo) {
         if (isUndo) return;
-        Tile tile = grid.GetTile(player.transform.position);
+        ITile tile = grid.GetTile(player.transform.position);
         DiceFace downwardFace = player.GetFaceFacingDirection(Vector3.down);
 
         bool triggeredAction = tile.OnPlayerEnter(player, downwardFace);
@@ -95,7 +100,7 @@ public class GameManager : MonoBehaviour {
             }
             // if the move triggered an action in the tile, undo it
             if (currentMove.triggeredAction) {
-                Tile tile = grid.GetTile(currentMove.position);
+                ITile tile = grid.GetTile(currentMove.position);
                 DiceFace downwardFace = player.GetFaceFacingDirection(Vector3.down);
                 tile.OnPlayerEnterReverse(player, downwardFace);
             }
@@ -121,9 +126,5 @@ public class GameManager : MonoBehaviour {
     public void NextLevel() {
         currentLevel++;
         LoadLevel(currentLevel);
-    }
-
-    public void OnHomeButtonPressed() {
-        // Application.LoadLevel("MainMenu");
     }
 }

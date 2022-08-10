@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PipTile : MonoBehaviour, Tile {
+public class PipTile : MonoBehaviour, ITile {
 
     public int value;
     int originalValue;

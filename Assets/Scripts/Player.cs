@@ -153,7 +153,7 @@ public class Player : MonoBehaviour {
     }
 
     bool CanRollTo(Vector3 direction) {
-        Tile nextTile = grid.GetTile(transform.position + direction);
+        ITile nextTile = grid.GetTile(transform.position + direction);
         if (nextTile == null) return false;
 
         DiceFace nextFaceDown = GetFaceFacingDirection(direction);

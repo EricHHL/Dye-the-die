@@ -1,10 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
 public class GameCamera : MonoBehaviour {
-    public Grid grid;
+    [SerializeField]
+    Grid grid;
+    [SerializeField]
+
     public Transform diceTarget;
 
     Vector2 previousMousePosition;
@@ -13,14 +14,12 @@ public class GameCamera : MonoBehaviour {
         grid.OnLevelLoaded += OnLevelLoaded;
     }
 
-    // Update is called once per frame
     void Update() {
         float rotation = Input.GetAxis("Rotate");
         if (rotation != 0) {
-            transform.Rotate(0, rotation * Time.deltaTime * 100, 0);
+            transform.Rotate(0, rotation * Time.deltaTime * 200, 0);
         }
 
-        //rotate camera by dragging
         if (Input.GetMouseButtonDown(0)) {
             isRotating = true;
             previousMousePosition = Input.mousePosition;

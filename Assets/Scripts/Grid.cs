@@ -1,14 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
+// Responsible for managing the loaded level, handling the Tile instances
 public class Grid : MonoBehaviour {
 
-    public GameObject PipTilePrefab;
-    public GameObject TrashTilePrefab;
+    [SerializeField]
+    GameObject PipTilePrefab;
+    [SerializeField]
+    GameObject TrashTilePrefab;
 
-    Tile[,] TileGrid;
+    ITile[,] TileGrid;
 
     public delegate void LevelLoadEvent(Level level);
     public event LevelLoadEvent OnLevelLoaded;
@@ -16,16 +17,7 @@ public class Grid : MonoBehaviour {
 
     bool isLevelLoading = false;
 
-    void Start() {
-
-    }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
-
-    public Tile GetTile(Vector3 position) {
+    public ITile GetTile(Vector3 position) {
         int x = Mathf.RoundToInt(position.x);
         int y = Mathf.RoundToInt(position.z);
         if (x < 0 || x >= TileGrid.GetLength(0) || y < 0 || y >= TileGrid.GetLength(1)) {
@@ -41,7 +33,7 @@ public class Grid : MonoBehaviour {
         DeloadLevel();
         isLevelLoading = true;
 
-        TileGrid = new Tile[level.width, level.height];
+        TileGrid = new ITile[level.width, level.height];
 
         for (int y = 0; y < level.height; y++) {
             for (int x = 0; x < level.width; x++) {
@@ -68,7 +60,7 @@ public class Grid : MonoBehaviour {
 
     public void InstantiateTile(int x, int y, int type) {
         GameObject tileGO;
-        Tile tile;
+        ITile tile;
         switch (type) {
             case 0:
             case 1:

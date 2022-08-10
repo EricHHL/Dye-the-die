@@ -1,26 +1,28 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class DiceMap : MonoBehaviour {
-    public Player player;
-    public Grid grid;
-    public Sprite[] diceFaceSprites;
-    public GameObject downwardIndicator;
+    [SerializeField]
+    Player player;
+    [SerializeField]
+    Grid grid;
+    [SerializeField]
+    Sprite[] diceFaceSprites;
+    [SerializeField]
+    GameObject downwardIndicator;
 
-    //dictyonary of all the dice faces
     Dictionary<string, Image> diceFaces = new Dictionary<string, Image>();
 
     void Start() {
         foreach (Transform child in transform) {
             diceFaces.Add(child.name, child.GetComponent<Image>());
         }
-        player.OnPlayerChanged += OnPlayerChanged;
+        player.OnPlayerChanged += UpdateMapState;
         grid.OnLevelDeloaded += Clear;
     }
 
-    void OnPlayerChanged() {
+    void UpdateMapState() {
         foreach (DiceFace face in player.faces) {
             diceFaces[face.name].sprite = diceFaceSprites[(int)face.value];
         }

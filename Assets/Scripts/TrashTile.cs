@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrashTile : MonoBehaviour, Tile {
+public class TrashTile : MonoBehaviour, ITile {
 
     public GameObject trashIcon;
 
